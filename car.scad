@@ -44,7 +44,6 @@ module corpo_principal() {
 // Chassi/assoalho
 module chassi() {
     color("Gray")
-    
     difference() {
         // Base plana
         cube([comprimento_carro, largura_carro, altura_assoalho]);
@@ -53,7 +52,6 @@ module chassi() {
         translate([10, 10, -1])
         cube([comprimento_carro - 20, largura_carro - 20, altura_assoalho + 2]);
     }
-    
 }
 
 // Rodas
@@ -61,16 +59,19 @@ module roda() {
     color("Black")
     difference() {
         // Pneu
-        
-        rotate([90,0,0])
-        cylinder(h=largura_roda*1, r=diametro_roda/2, center=false, $fn=40);
+        rotate([90, 0, 0])
+        cylinder(h=largura_roda, r=diametro_roda/2, center=true, $fn=40);
         
         // Aro
+        //rotate([90, 0, 0])
+        //cylinder(h=largura_roda + 1, r=diametro_roda/4, center=true, $fn=30);
         
-        //rotate([90,0,0])
-        //cylinder(h=largura_roda*1, r=5, center=false, $fn=30);
-        
-        
+        // Detalhes do aro
+        for(i = [0:5]) {
+            rotate([0, 0, i * 60])
+            translate([diametro_roda/3, 0, 0])
+            cube([diametro_roda/5, 3, largura_roda + 2], center=true);
+        }
     }
 }
 
@@ -79,21 +80,21 @@ module vidros() {
     color("LightBlue", 0.7)
     union() {
         // Para-brisas dianteiro
-        translate([comprimento_carro*0.4, -largura_carro/4 , altura_assoalho + 35])
+        translate([comprimento_carro/2.5 , -largura_carro/3.8, altura_assoalho + 35])
         rotate([0, 30, 0])
-        cube([2, largura_carro/2 , 15]);
+        cube([2, largura_carro/1.5 - largura_carro/8 , 15]);
         
         // Janelas laterais
-        translate([comprimento_carro*0.452, (-largura_carro/4), altura_assoalho + 35])
+        translate([comprimento_carro/2.2, -largura_carro/4 , altura_assoalho + 35])
         cube([30, 2, 12]);
         
-        translate([comprimento_carro*0.452, (largura_carro/2)*0.4, altura_assoalho + 35])
+        translate([comprimento_carro/2.2, largura_carro/4 , altura_assoalho + 35])
         cube([30, 2, 12]);
         
-        // Janela traseira
-        translate([comprimento_carro*0.7, -largura_carro/4 , altura_assoalho + 35])
+        translate([comprimento_carro/1.45 , -largura_carro/3.8, altura_assoalho + 35])
         rotate([0, 0, 0])
-        cube([2, largura_carro/2 , 12]);
+        cube([2, largura_carro/1.5 - largura_carro/8 , 15]);
+
     }
 }
 
@@ -120,16 +121,10 @@ module farois() {
 // Aileron traseiro
 module aileron() {
     color("Yellow")
-    difference() {
-        // Asa principal
-        translate([comprimento_carro - 20, -25, altura_assoalho + 25])
-        cube([5, 50, 8]);
-        
-        // Forma aerodinâmica
-        translate([comprimento_carro - 25, -26, altura_assoalho + 38])
-        rotate([0, 45, 0])
-        cube([10, 52, 10]);
-    }
+    // Janela traseira
+        translate([comprimento_carro - 15, -largura_carro/2 + 5, altura_assoalho + 25])
+        rotate([0, 30, 0])
+        cube([2, largura_carro - 10, 10]);
 }
 
 // Escapamento
@@ -150,16 +145,16 @@ union() {
     escapamento();
     
     // Rodas
-    translate([posicao_eixo_dianteiro, largura_carro/2-(largura_roda*0.1) , diametro_roda/2])
+    translate([posicao_eixo_dianteiro, -largura_carro/2 + largura_roda*0.51, diametro_roda/2])
     roda();
     
-    translate([posicao_eixo_dianteiro, -largura_carro/2-(-largura_roda*1.1) , diametro_roda/2])
+    translate([posicao_eixo_dianteiro, largura_carro/2 - largura_roda*0.51, diametro_roda/2])
     roda();
     
-    translate([posicao_eixo_traseiro, largura_carro/2-(largura_roda*0.1), diametro_roda/2])
+    translate([posicao_eixo_traseiro, -largura_carro/2 + largura_roda*0.51, diametro_roda/2])
     roda();
     
-    translate([posicao_eixo_traseiro, -largura_carro/2 -(-largura_roda*1.1), diametro_roda/2])
+    translate([posicao_eixo_traseiro, largura_carro/2 - largura_roda*0.51, diametro_roda/2])
     roda();
 }
 
